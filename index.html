@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pergantian Tanggal - 23 Oktober 2026</title>
+    <!-- Memuat Tailwind CSS dari CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a; /* Slate 900 */
+            color: white;
+            overflow: hidden;
+        }
+
+        /* Animasi kustom untuk teks Countdown */
+        .pop {
+            animation: pop 0.3s ease-out;
+        }
+
+        @keyframes pop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); text-shadow: 0 0 20px rgba(96, 165, 250, 0.8); }
+            100% { transform: scale(1); }
+        }
+
+        /* Animasi Zoom In untuk Hasil Akhir */
+        .zoom-in-effect {
+            opacity: 0;
+            transform: scale(0.3);
+            animation: zoomIn 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes zoomIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.3);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        /* Animasi partikel/cahaya latar belakang (opsional) */
+        .glow {
+            position: absolute;
+            width: 100vw;
+            height: 100vh;
+            background: radial-gradient(circle at center, rgba(56, 189, 248, 0.1) 0%, transparent 60%);
+            z-index: -1;
+        }
+    </style>
+</head>
+<body class="h-screen w-screen flex items-center justify-center relative">
+    
+    <div class="glow"></div>
+
+    <!-- Kontainer Hitung Mundur (Menampilkan 22 Oktober menuju 23) -->
+    <div id="countdown-view" class="flex flex-col items-center justify-center text-center px-4 w-full transition-opacity duration-500">
+        <h2 class="text-2xl md:text-3xl font-light text-slate-400 mb-2 tracking-widest uppercase">
+            22 Oktober 2026
+        </h2>
+        <p class="text-sm md:text-base text-slate-500 mb-8 tracking-wide">Menuju pergantian hari dalam...</p>
+        
+        <!-- Angka Hitung Mundur -->
+        <div id="timer" class="text-9xl md:text-[15rem] font-black text-transparent bg-clip-text bg-gradient-to-br from-blue-400 to-indigo-600 drop-shadow-2xl leading-none">
+            10
+        </div>
+        
+        <p class="text-xl md:text-2xl text-slate-400 mt-6 tracking-[0.2em] uppercase font-light">
+            Detik
+        </p>
+    </div>
+
+    <!-- Kontainer Hasil Akhir (23 Oktober) - Disembunyikan secara default -->
+    <div id="result-view" class="hidden flex-col items-center justify-center text-center absolute inset-0 w-full h-full bg-slate-900 z-10">
+        <div id="result-content" class="flex flex-col items-center">
+            <h1 class="text-5xl md:text-7xl lg:text-9xl font-black text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-500 mb-2 leading-tight">
+                23
+            </h1>
+            <h2 class="text-4xl md:text-6xl lg:text-8xl font-bold text-white tracking-widest uppercase mb-4 shadow-black drop-shadow-md">
+                Oktober
+            </h2>
+            <h3 class="text-3xl md:text-5xl text-emerald-300 font-light tracking-[0.3em]">
+                2026
+            </h3>
+        </div>
+        <!-- Pesan Selamat -->
+        <div id="greeting-text" class="mt-12 text-slate-400 text-lg md:text-2xl font-light tracking-wide opacity-0 transition-opacity duration-1000 delay-1000">
+            HAPPY BIRTHDAY TO ME
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            let timeLeft = 10;
+            const timerElement = document.getElementById('timer');
+            const countdownView = document.getElementById('countdown-view');
+            const resultView = document.getElementById('result-view');
+            const resultContent = document.getElementById('result-content');
+            const greetingText = document.getElementById('greeting-text');
+
+            // Fungsi yang dipanggil setiap 1 detik
+            const countdownInterval = setInterval(() => {
+                timeLeft--;
+                
+                if (timeLeft > 0) {
+                    // Update angka
+                    timerElement.textContent = timeLeft;
+                    
+                    // Trigger ulang animasi 'pop' dengan menghapus dan menambahkan class
+                    timerElement.classList.remove('pop');
+                    // void timerElement.offsetWidth memicu reflow agar animasi dapat berjalan berulang
+                    void timerElement.offsetWidth; 
+                    timerElement.classList.add('pop');
+                } else {
+                    // Hitung mundur selesai
+                    clearInterval(countdownInterval);
+                    
+                    // Transisi menghilang untuk hitung mundur
+                    countdownView.style.opacity = '0';
+                    
+                    // Tunggu sedikit agar transisi opacity terlihat, lalu tampilkan hasil
+                    setTimeout(() => {
+                        countdownView.classList.add('hidden');
+                        
+                        // Tampilkan layar 23 Oktober
+                        resultView.classList.remove('hidden');
+                        resultView.classList.add('flex');
+                        
+                        // Tambahkan animasi zoom in yang dramatis
+                        resultContent.classList.add('zoom-in-effect');
+                        
+                        // Munculkan teks tambahan setelah animasi utama selesai
+                        setTimeout(() => {
+                            greetingText.style.opacity = '1';
+                        }, 1000);
+                        
+                    }, 500); // 500ms cocok dengan duration-500 di tailwind
+                }
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
